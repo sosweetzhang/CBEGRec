@@ -1,6 +1,0 @@
-Model Type: E-CGE (Recommender)
-Data Ratio: 50%
-Best Val AUC: 0.9382
-Total Epochs: 30
-Hidden Dim: 159
-Input Dim: 128
