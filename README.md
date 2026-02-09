@@ -1,5 +1,3 @@
-# CBEGRec
-
 **Core code for the paper:** *CBEGRec: Learning Path Recommendation via Concept Bundling and Exercise Generation*
 
 ---
@@ -10,10 +8,4 @@ Learning path recommendation is a critical component of adaptive learning, aimin
 
 ---
 
-## How to run
-
-1. **Environment**: `pip install -r requirements.txt`, copy `.env.example` to `.env` and set `LLM_API_KEY` (and optionally `KG_LLM_*` for KG construction).
-2. **Build KG**: `python scripts/generate_kg.py`
-3. **Train**: `python scripts/train_ecge_kt_80.py --config config/config_physics.yaml`, then `python scripts/train_ecge_50.py --config config/config_physics.yaml`
-4. **Evaluate**: `python scripts/run_eval.py --config config/config_physics.yaml`
 
