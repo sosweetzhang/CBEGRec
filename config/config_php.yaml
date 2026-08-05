@@ -1,0 +1,92 @@
+data:
+  base_path: "./data"
+  domain: "PHP"
+  records_file: "records.txt"
+  problem_info_file: "problem_info.json"
+  problem_file: "problem.json"
+  problem2id_file: "problem2id.json"
+  concept2id_file: "concept2id.json"
+  id2concept_file: "id2concept.json"
+  c2p_file: "c2p.json"
+  kg_structure_file: "KG_structure.json"
+
+model:
+  bert_path: "./bert-base-chinese-backup"
+  base_model_dir: "./models"
+  checkpoint_dir: "./checkpoints"
+
+training:
+  batch_size: 32
+  epochs: 30
+  learning_rate: 0.002
+  hidden_dim: 131
+  input_dim: 128
+  layer_dim: 1
+  pad_len: 20
+  train_split: 0.9
+  seed: 2024
+  use_small_data: false
+  device: "auto"
+  num_workers: 4
+  pin_memory: true
+  use_amp: true
+
+ecge:
+  uncertainty_threshold_low: 0.3
+  uncertainty_threshold_high: 0.7
+  mastery_threshold: 0.7
+  hidden_dim: 131
+
+concept_bundling:
+  frontier_threshold: 0.6
+  top_k_bundles: 5
+  max_concepts_per_bundle: 4
+  max_frontier_candidates: 30
+  weight_zpd: 0.31
+  weight_cohesion: 0.25
+  weight_goal_proximity: 0.44
+
+exercise_generation:
+  max_retries: 3
+  rag_top_k: 5
+  teacher_temperature: 0.0
+  solver_temperature: 0.0
+  critic_temperature: 0.0
+
+llm:
+  provider: "openai_compat"
+  model: "qwen-plus"
+  temperature: 0.0
+  mock: false
+
+kg_construction:
+  rebuild_on_start: false
+  significance_threshold: 0.1
+  llm_extraction_enabled: true
+  data_validation_enabled: true
+  use_separate_llm: true
+
+recommendation:
+  max_steps: 20
+  goal_completion_threshold: 0.7
+  enable_checkpoint: true
+  checkpoint_interval: 10
+
+logging:
+  level: "INFO"
+  log_dir: "./logs"
+  output_dir: "./outputs"
+  save_training_logs: true
+  save_recommendation_logs: true
+  save_generated_exercises: true
+  save_metrics: true
+
+evaluation:
+  student_ratio: 0.1
+
+demo:
+  use_small_data: true
+  max_students: 5
+  max_episodes: 3
+  max_steps: 3
+  verbose: true

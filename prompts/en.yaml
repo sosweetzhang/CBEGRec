@@ -1,0 +1,111 @@
+
+teacher:
+  system: |
+    You are an exercise generation expert. Given a concept bundle and student mastery levels,
+    generate matching exercises that cover all target concepts, scale to current ability,
+    and include a reference answer plus a concise pedagogical note.
+  user: |
+    Generate one exercise based on the following.
+
+    Target concept bundle: {bundle_names}
+    Reason for selecting this bundle: {j_t}
+    Student mastery levels: {h_t}
+    {reference_section}
+    {style_instruction}
+    {critic_feedback}
+    Output requirements:
+    - Difficulty matches current level; cover all concepts in the bundle
+    - Provide a complete reference answer
+    - Provide an exercise recommendation: how it helps master the target concepts and its relation to the current learning step (1-3 sentences)
+
+    Return format (missing any field is considered failure):
+    Exercise: [exercise content]
+    Answer: [reference answer]
+    Explanation: [exercise recommendation]
+  style_ref: |
+    You have reference exercises. Follow them closely:
+    - Same format: if references are fill-in, choice, calculation, or short-answer, use the same format
+    - Same context: adopt the domain scenarios, parameters, and phrasing of the references
+    - Same style: match difficulty, length, and notation of the references
+    Make moderate variations to cover target concepts; do not deviate from the references.
+  style_free: |
+    No reference exercises are available. You may freely design format, context, and style.
+
+solver:
+  system: |
+    You are a problem-solving assistant. Give only the final answer to exercises; do not show solution steps.
+  user: |
+    Solve the following exercise. Give only the final answer, no solution steps.
+
+    Exercise:
+    {e_t}
+
+    Answer:
+
+critic:
+  system: |
+    You are an exercise audit expert. Verify that generated exercises meet quality and pedagogical standards.
+  user: |
+    Verify whether the following generated exercise meets requirements.
+
+    Exercise: {e_t}
+    Reference answer: {a_ref_t}
+    Solver answer: {a_sol_t}
+
+    Target concept bundle: {bundle_names}
+    Reason for selecting this bundle: {j_t}
+    Exercise recommendation: {J_t}
+
+    Validation criteria:
+    1. Consistency: Are the reference and solver answers consistent?
+    2. Alignment: Does the exercise cover all target concepts?
+    3. Explanation consistency: Does the recommendation match what the exercise actually tests?
+    4. Path alignment: Does the exercise align with the reason for selecting this bundle?
+
+    Return format:
+    Valid: [True/False]
+    Reason: [reason]
+
+    Return only the validation result and reason.
+
+bundle_select:
+  system: |
+    You are an intelligent tutoring system. Given a student's cognitive profile and target concept, select the most suitable concept bundle from the candidates.
+  user: |
+    Based on the student's cognitive profile and target learning concept, select the most suitable concept bundle from the candidates below.
+    {diversity_hint}
+    Student profile:
+    {profile_text}
+
+    Target learning concept: {goal_name}
+
+    Candidate concept bundles:
+    {bundle_descriptions}
+
+    Select the bundle most helpful for the student to achieve the goal and explain why. If multiple bundles are similarly effective, prefer one different from recent bundles for diversity.
+
+    Return format: Bundle X; Reason: ...
+    Return only the selected bundle number and reason.
+
+kg_refinement:
+  system: |
+    You are an expert in educational knowledge graph refinement.
+  user: |
+    You are given a set of knowledge concepts and an empirical transition graph.
+
+    Concepts:
+    {concepts_json}
+
+    Empirical transition edges:
+    {transition_edges}
+
+    Your tasks are:
+    1. Identify missing edges that likely reflect meaningful prerequisite or dependency relations.
+    2. Identify and remove edges that are semantically implausible, incorrect, or violate common-sense learning dependencies.
+    3. Provide a brief explanation for each suggested addition or removal.
+    4. Ensure the refined graph is suitable for constructing a directed acyclic graph for learning path recommendation.
+
+    Return your output in the following structured format:
+    - Added edges: list of (v_i, v_j) with rationale
+    - Removed edges: list of (v_i, v_j) with rationale
+    - Any general observations or notes about the graph's semantic consistency

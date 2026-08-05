@@ -1,0 +1,8 @@
+numpy>=1.26
+torch
+transformers
+pyyaml
+python-dotenv
+openai
+tqdm
+scikit-learn
